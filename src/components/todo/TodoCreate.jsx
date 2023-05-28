@@ -1,17 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {InputGroup, Button, FormControl} from 'react-bootstrap';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 
-const TodoCreate = () => {
+const TodoCreate = ({onCreateTodo}) => {
+  const [title, setTitle] = useState('');
+
+  const createTodo = () => {
+    if (title.length > 0) {
+      const todo ={
+        title,
+        status: 'Pending'
+      }
+      onCreateTodo(todo);
+      setTitle('');
+    }
+  }
     return (  
         <InputGroup className="mb-3">
         <FormControl
-          placeholder="Recipient's username"
-          aria-label="Recipient's username"
+          placeholder="Enter Todo"
+          aria-label="Enter Todo"
           aria-describedby="basic-addon2"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
         />
-        <Button variant="outline-info" id="button-addon2">
+        <Button variant="info" id="button-addon2" onClick={e => createTodo()}>
           <FontAwesomeIcon icon={faPlusCircle} />New
         </Button>
       </InputGroup>
