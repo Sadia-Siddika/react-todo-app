@@ -5,8 +5,11 @@ import { faEdit, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 import TodoCreate from './TodoCreate';
 import TodoEmpty from './TodoEmpty';
+import TodoEdit from './TodoEdit';
 
 const TodoList =() => {
+
+    const [todoEditing, settodoEditing] = useState(null);
 
     const [todos, setTodos] = useState([
         {
@@ -28,6 +31,13 @@ const TodoList =() => {
        newTodos.unshift(todo);
        setTodos(newTodos); 
     }
+
+    const updateTodo = ({ index,todo }) => {
+        let newTodos = todos.slice();
+        newTodos[index] = todo;
+        setTodos(newTodos); 
+        settodoEditing(null);
+     }
 
     const deleteTodo = (index) => {
         let newTodos = todos.slice();
@@ -53,10 +63,23 @@ const TodoList =() => {
                 todos.map((todo, index) =>(
                     <ListGroup.Item key={index} variant={todo.status === 'Pending' ? 'info' : 'warning'}>
                     <div className="float-start">
-                        {todo.title}
+                        {
+                            (todoEditing === index) ?
+                            <TodoEdit
+                              todo={todo}
+                              index={index}
+                              onUpdateTodo={value => updateTodo(value)}
+                            />
+                            :
+                            <>
+                               {todo.status === 'Pending' && todo.title}
+                               {todo.status === 'Done' && <del>{todo.title }</del>}
+                            </>
+                        }
+                        
                     </div>
                     <div className="float-end">
-                        <Button variant="outline-success" className='ms-2'>
+                        <Button variant="outline-success" className='ms-2' onClick={()=> settodoEditing(index)}>
                            <FontAwesomeIcon icon= {faEdit}/>
                         </Button>
                         <Button variant="outline-danger" className='ms-2' onClick={() => deleteTodo(index)}>
