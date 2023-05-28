@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Card, ListGroup, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons'
+
 import TodoCreate from './TodoCreate';
+import TodoEmpty from './TodoEmpty';
 
 const TodoList =() => {
+
     const [todos, setTodos] = useState([
         {
             'title'  : 'First Todo',
@@ -19,6 +22,13 @@ const TodoList =() => {
             'status' : 'Done'
         }
     ]);
+
+    const addTodo = (todo) => {
+       let newTodos = todos.slice();
+       newTodos.unshift(todo);
+       setTodos(newTodos); 
+    }
+
     return(
         <Card>
       <Card.Body>
@@ -26,12 +36,16 @@ const TodoList =() => {
             My Todos
         </Card.Title>
 
-        <TodoCreate/>
+        <TodoCreate onCreateTodo={todo => addTodo(todo)}/>
+
+        {
+            todos.length === 0 && <TodoEmpty/>
+        }
 
         <ListGroup>
             {
                 todos.map((todo, index) =>(
-                    <ListGroup.Item key={index}>
+                    <ListGroup.Item key={index} variant={todo.status === 'Pending' ? 'info' : 'warning'}>
                     <div className="float-start">
                         {todo.title}
                     </div>
