@@ -29,6 +29,12 @@ const TodoList =() => {
        setTodos(newTodos); 
     }
 
+    const deleteTodo = (index) => {
+        let newTodos = todos.slice();
+        newTodos.splice(index, 1);
+        setTodos(newTodos); 
+     }
+
     return(
         <Card>
       <Card.Body>
@@ -53,7 +59,7 @@ const TodoList =() => {
                         <Button variant="outline-success" className='ms-2'>
                            <FontAwesomeIcon icon= {faEdit}/>
                         </Button>
-                        <Button variant="outline-danger" className='ms-2'>
+                        <Button variant="outline-danger" className='ms-2' onClick={() => deleteTodo(index)}>
                            <FontAwesomeIcon icon= {faTrash}/>
                         </Button>
                     </div>
